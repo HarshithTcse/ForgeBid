@@ -1,5 +1,7 @@
 
 import re
+from pathlib import Path
+from forgebid.pdf_reader import extract_text_from_pdf
 
 from forgebid.models import Requirement, RFPDocument
 
@@ -71,3 +73,13 @@ def parse_rfp(text: str, title: str = "Untitled RFP") -> RFPDocument:
         requirements=requirements,
         evaluation_criteria=criteria,
     )
+
+
+
+def parse_rfp_pdf(file_path: str | Path) -> RFPDocument:
+    """Extract text from a PDF and parse it into structured RFP data."""
+
+    text = extract_text_from_pdf(file_path)
+    title = Path(file_path).stem.replace("_", " ").replace("-", " ")
+
+    return parse_rfp(text, title=title)
