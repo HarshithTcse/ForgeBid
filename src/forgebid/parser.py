@@ -4,6 +4,24 @@ import re
 from forgebid.models import Requirement, RFPDocument
 
 
+def classify_requirement(description: str) -> str:
+    text = description.lower()
+
+    if any(word in text for word in ["security", "encryption", "privacy"]):
+        return "security"
+
+    if any(word in text for word in ["support", "maintenance", "helpdesk"]):
+        return "support"
+
+    if any(word in text for word in ["document", "report", "documentation"]):
+        return "documentation"
+
+    if any(word in text for word in ["cost", "price", "budget", "pricing"]):
+        return "pricing"
+
+    return "general"
+
+
 def parse_rfp(text: str, title: str = "Untitled RFP") -> RFPDocument:
     """Extract basic requirements and evaluation criteria from RFP text."""
 
@@ -43,7 +61,7 @@ def parse_rfp(text: str, title: str = "Untitled RFP") -> RFPDocument:
                 Requirement(
                     requirement_id=f"REQ-{len(requirements) + 1:03}",
                     description=description,
-                    category="general",
+                    category=classify_requirement(description),
                     mandatory=mandatory,
                 )
             )
