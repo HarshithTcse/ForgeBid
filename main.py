@@ -1,16 +1,24 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from forgebid.ai_extractor import extract_rfp_with_ai
 
+sample_rfp = """
+Request for Proposal: College Website Development
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+Requirements:
+- The website must use HTTPS encryption.
+- The vendor must provide maintenance support for one year.
+- The proposal must include a detailed pricing breakdown.
 
+Evaluation Criteria:
+- Technical quality
+- Cost effectiveness
+- Vendor experience
+"""
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+try:
+    result = extract_rfp_with_ai(sample_rfp)
+    print("SUCCESS: Gemini responded!")
+    print("\nExtracted RFP data:\n")
+    print(result.model_dump_json(indent=2))
+except Exception as error:
+    print(f"Gemini test failed: {type(error).__name__}: {error}")
